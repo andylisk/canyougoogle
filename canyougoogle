@@ -1,0 +1,99 @@
+<html>
+<head>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>CAN YOU GOOGLE?</title>
+  <meta name="author" content="Andy Li">
+  <meta name="description" content="Try to google">
+  <meta name="keywords" content="google">
+
+  
+  <script src="http://www.lisankit.com/ndxzsite/js/jquery-1.10.0.min.js"></script>
+  
+  <script type="text/javascript">
+    $(document).ready(function() {
+      var lastX, lastY;
+      var mw = 88;
+      var mh = 102;
+      
+      $('#container').css({left:$(window).width()/2-mw/2, top:$(window).height()/2-mh/2});
+      
+      window.onkeydown = function(e) {
+        if (e.keyCode == 9 || e.which == 9) {
+          e.preventDefault();
+        }
+      }
+      
+      $('body').on('mousemove', function(e) {
+        var pos = $('#container').position();
+        var dist = lineDistance(e.pageX, e.pageY, pos.left+mw/2, pos.top+mh/2);
+        var lastDist = lineDistance(lastX, lastY, pos.left+mw/2, pos.top+mh/2);
+        if (dist < 200 && dist < lastDist) {
+          var dx = pos.left+mw/2-e.pageX;
+          var dy = pos.top+mh/2-e.pageY;
+          var sx = 1/dist*dx;
+          var sy = 1/dist*dy;
+          var x = Math.max(0, Math.min(pos.left-(lastY-e.pageY)*sy, $(window).width()-mw));
+          var y = Math.max(0, Math.min(pos.top-(lastX-e.pageX)*sx, $(window).height()-mh));
+          $('#container').css({left:x, top:y});
+        }
+        lastX = e.pageX;
+        lastY = e.pageY;
+      });
+      
+      $('#container').on('mouseover', function() {
+        var x = Math.random()*($(window).width()-mw);
+        var y = Math.random()*($(window).height()-mh);
+        $(this).css({left:x, top:y});
+      });
+    });
+    
+    function lineDistance(x1, y1, x2, y2) {
+      var xs = 0;
+      var ys = 0;
+      xs = x2 - x1;
+      xs = xs * xs;
+      ys = y2 - y1;
+      ys = ys * ys;
+      return Math.sqrt(xs + ys);
+    }
+  </script>
+  
+  
+  <style>
+    html,body {
+      margin:0;
+      padding:0;
+      width:100%;
+      height:100%;
+    }
+    #container {
+      position:absolute;
+      width:230px;
+      height:19px;
+      padding:10px;
+    }
+    ::selection {
+      background-color:transparent;
+      color:none;
+    }
+  </style>
+
+</head>
+<body>
+  <div id="google search bar"></div>
+  
+  <div id="container">
+    <form name="cse" id="searchbox_demo" action="https://www.google.com/search">
+      <input type="hidden" name="cref" value="" />
+      <input type="hidden" name="ie" value="utf-8" />
+      <input type="hidden" name="hl" value="" />
+      <input name="q" type="text" size="25" value="Can you Google?" />
+      <input type="submit" name="sa" value="Search" />
+    </form>
+<script type="text/javascript" src="https%3A%2F%2Fcse.google.com%2Fcse/tools/onthefly?form=searchbox_demo&lang="></script>
+
+  </div>
+
+</body>
+</html>
